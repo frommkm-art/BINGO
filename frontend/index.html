@@ -226,10 +226,12 @@ let playerNumber=0
 let myTurn=false
 let called=[]
 
+/* JOIN ROOM */
+
 function joinRoom(){
 
-roomCode = document.getElementById("roomCode").value
-let name = document.getElementById("playerName").value
+roomCode=document.getElementById("roomCode").value
+let name=document.getElementById("playerName").value
 
 fetch("/api/join-room",{
 method:"POST",
@@ -242,11 +244,26 @@ player_name:name
 .then(r=>r.json())
 .then(data=>{
 
-playerNumber = data.player
-board = data.board
+playerNumber=data.player
+board=data.board
 
 drawBoard()
 
+socket.emit("join-room",roomCode)
+
+if(playerNumber===1){
+myTurn=true
+document.getElementById("turnStatus").innerText="Your Turn"
+}else{
+myTurn=false
+document.getElementById("turnStatus").innerText="Opponent Turn"
+}
+
+})
+
+}
+
+/* DRAW BOARD */
 
 function drawBoard(){
 
@@ -260,6 +277,7 @@ let tr=document.createElement("tr")
 row.forEach(n=>{
 
 let td=document.createElement("td")
+
 td.innerText=n
 td.id="cell-"+n
 
@@ -280,29 +298,15 @@ table.appendChild(tr)
 
 /* CALL NUMBER */
 
-function loadRooms(){
+function callNumber(number){
 
-fetch("/api/rooms")
-.then(r=>r.json())
-.then(data=>{
-
-const lobby=document.getElementById("lobby")
-lobby.innerHTML=""
-
-data.forEach(room=>{
-
-let card=document.createElement("div")
-card.className="room-card"
-
-card.innerHTML=
-'<div class="room-title">Room: '+room.room_code+'</div>'+
-'<div class="room-players">👥 Players: '+room.players+'</div>'+
-'<button class="join-btn" onclick="quickJoin(\''+room.room_code+'\')">Join</button>'
-
-lobby.appendChild(card)
-
+fetch("/api/call-number",{
+method:"POST",
+headers:{"Content-Type":"application/json"},
+body:JSON.stringify({
+room_code:roomCode,
+number:number
 })
-
 })
 
 }
@@ -316,6 +320,7 @@ document.getElementById("sound").play()
 called.push(num)
 
 let cell=document.getElementById("cell-"+num)
+
 if(cell){
 cell.classList.add("marked")
 }
@@ -323,10 +328,12 @@ cell.classList.add("marked")
 checkBingo()
 
 myTurn=!myTurn
+
 document.getElementById("turnStatus").innerText=
 myTurn ? "Your Turn" : "Opponent Turn"
 
 })
+
 
 /* UPDATE BINGO LETTERS */
 
@@ -347,6 +354,7 @@ el.classList.remove("bingo-active")
 }
 
 }
+
 
 /* CHECK BINGO */
 
@@ -501,6 +509,37 @@ popup.classList.remove("show")
 
 }
 
+
+/* LOAD ROOMS */
+
+function loadRooms(){
+
+fetch("/api/rooms")
+.then(r=>r.json())
+.then(data=>{
+
+const lobby=document.getElementById("lobby")
+lobby.innerHTML=""
+
+data.forEach(room=>{
+
+let card=document.createElement("div")
+card.className="room-card"
+
+card.innerHTML=
+'<div class="room-title">Room: '+room.room_code+'</div>'+
+'<div class="room-players">👥 Players: '+room.players+'</div>'+
+'<button class="join-btn" onclick="quickJoin(\''+room.room_code+'\')">Join</button>'
+
+lobby.appendChild(card)
+
+})
+
+})
+
+}
+
+/* QUICK JOIN */
 
 function quickJoin(code){
 document.getElementById("roomCode").value=code
