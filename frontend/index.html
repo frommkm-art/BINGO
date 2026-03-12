@@ -226,6 +226,27 @@ let playerNumber=0
 let myTurn=false
 let called=[]
 
+/* CALL NUMBER */
+
+function callNumber(number){
+
+if(!roomCode) return
+
+fetch("/api/call-number",{
+method:"POST",
+headers:{"Content-Type":"application/json"},
+body:JSON.stringify({
+room_code:roomCode,
+number:number
+})
+})
+.then(r=>r.json())
+.then(()=>{
+console.log("Number sent:",number)
+})
+
+}
+
 /* JOIN ROOM */
 
 function joinRoom(){
