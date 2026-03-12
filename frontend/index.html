@@ -300,6 +300,8 @@ table.appendChild(tr)
 
 function callNumber(number){
 
+if(!roomCode) return;
+
 fetch("/api/call-number",{
 method:"POST",
 headers:{"Content-Type":"application/json"},
@@ -307,6 +309,13 @@ body:JSON.stringify({
 room_code:roomCode,
 number:number
 })
+})
+.then(r=>r.json())
+.then(()=>{
+console.log("Number sent:",number)
+})
+.catch(err=>{
+console.error("Error calling number:",err)
 })
 
 }
