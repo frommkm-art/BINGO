@@ -22,10 +22,6 @@ io.on("connection", (socket) => {
 
 const PORT = process.env.PORT || 3000;
 
-server.listen(PORT, () => {
-  console.log("Server running on port " + PORT);
-});
-
 let rooms={}
 
 /* GENERATE BOARD */
@@ -168,16 +164,12 @@ res.json(list)
 
 /* SOCKET */
 
-io.on("connection",(socket)=>{
+io.on("connection", (socket) => {
+  console.log("Player connected");
+});
 
-socket.on("join-room",(room)=>{
-socket.join(room)
-})
-
-})
-
-const PORT = process.env.PORT || 3000
+const PORT = process.env.PORT || 3000;
 
 server.listen(PORT, () => {
-  console.log("Server running on port " + PORT)
-})
+  console.log("Server running on port " + PORT);
+});
