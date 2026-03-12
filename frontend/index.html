@@ -247,10 +247,6 @@ board=data.board
 
 drawBoard()
 
-})
-
-}
-
 socket.emit("join-room",roomCode)
 
 if(playerNumber===1){
@@ -264,7 +260,6 @@ document.getElementById("turnStatus").innerText="Opponent Turn"
 })
 
 }
-
 
 function drawBoard(){
 
@@ -519,42 +514,6 @@ popup.classList.remove("show")
 
 }
 
-/* LOBBY */
-
-function loadRooms(){
-
-fetch("/api/rooms")
-.then(r => {
-  if(!r.ok){
-    throw new Error("Server error: " + r.status)
-  }
-  return r.json()
-})
-.then(data => {
-
-const lobby=document.getElementById("lobby")
-lobby.innerHTML=""
-
-data.forEach(room=>{
-
-let card=document.createElement("div")
-card.className="room-card"
-
-card.innerHTML=
-'<div class="room-title">Room: '+room.room_code+'</div>'+
-'<div class="room-players">👥 Players: '+room.players+'</div>'+
-'<button class="join-btn" onclick="quickJoin(\''+room.room_code+'\')">Join</button>'
-
-lobby.appendChild(card)
-
-})
-
-})
-.catch(err=>{
-console.error("Load rooms failed:",err)
-})
-
-}
 
 function quickJoin(code){
 document.getElementById("roomCode").value=code
