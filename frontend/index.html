@@ -228,8 +228,8 @@ let called=[]
 
 function joinRoom(){
 
-roomCode=document.getElementById("roomCode").value
-let name=document.getElementById("playerName").value
+roomCode = document.getElementById("roomCode").value
+let name = document.getElementById("playerName").value
 
 fetch("/api/join-room",{
 method:"POST",
@@ -242,24 +242,11 @@ player_name:name
 .then(r=>r.json())
 .then(data=>{
 
-playerNumber=data.player
-board=data.board
+playerNumber = data.player
+board = data.board
 
 drawBoard()
 
-socket.emit("join-room",roomCode)
-
-if(playerNumber===1){
-myTurn=true
-document.getElementById("turnStatus").innerText="Your Turn"
-}else{
-myTurn=false
-document.getElementById("turnStatus").innerText="Opponent Turn"
-}
-
-})
-
-}
 
 function drawBoard(){
 
