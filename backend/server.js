@@ -16,11 +16,6 @@ app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "../frontend/index.html"));
 });
 
-io.on("connection", (socket) => {
-  console.log("Player connected");
-});
-
-const PORT = process.env.PORT || 3000;
 
 let rooms={}
 
@@ -167,6 +162,8 @@ res.json(list)
 io.on("connection", (socket) => {
   console.log("Player connected");
 });
+
+
 
 const PORT = process.env.PORT || 3000;
 
