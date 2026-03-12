@@ -9,13 +9,22 @@ const io = new Server(server)
 
 app.use(express.json())
 
-app.use(express.static(path.join(__dirname,"frontend")))
+// serve frontend
+app.use(express.static(path.join(__dirname, "frontend")))
 
-const PORT = process.env.PORT || 7000;
+app.get("/", (req, res) => {
+  res.sendFile(path.join(__dirname, "frontend", "index.html"))
+})
+
+io.on("connection", (socket) => {
+  console.log("User connected")
+})
+
+const PORT = process.env.PORT || 3000
 
 server.listen(PORT, () => {
-  console.log("Server running on port", PORT);
-});
+  console.log("Server running on port " + PORT)
+})
 
 let rooms = {};
 
@@ -160,6 +169,12 @@ io.to(data.room_code).emit("number-called",data.number);
 
 /* START SERVER */
 
-server.listen(7000,()=>{
-console.log("Bingo server running on http://localhost:7000");
-});
+app.get("/", (req, res) => {
+  res.sendFile(path.join(__dirname, "frontend", "index.html"))
+})
+
+const PORT = process.env.PORT || 3000
+
+server.listen(PORT, () => {
+  console.log("Server running on port " + PORT)
+})
