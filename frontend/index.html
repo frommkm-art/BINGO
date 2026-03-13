@@ -226,8 +226,6 @@ let playerNumber=0
 let myTurn=false
 let called=[]
 
-/* CALL NUMBER */
-
 function callNumber(number){
 
 if(!roomCode) return
@@ -244,8 +242,13 @@ number:number
 .then(()=>{
 console.log("Number sent:",number)
 })
+.catch(err=>{
+console.error("Call number error:",err)
+})
 
 }
+
+window.callNumber = callNumber;
 
 /* JOIN ROOM */
 
@@ -298,12 +301,12 @@ let tr=document.createElement("tr")
 row.forEach(n=>{
 
 let td=document.createElement("td")
-
 td.innerText=n
 td.id="cell-"+n
 
 td.onclick=()=>{
 if(!myTurn) return
+if(called.includes(n)) return
 callNumber(n)
 }
 
@@ -317,29 +320,6 @@ table.appendChild(tr)
 
 }
 
-/* CALL NUMBER */
-
-function callNumber(number){
-
-if(!roomCode) return;
-
-fetch("/api/call-number",{
-method:"POST",
-headers:{"Content-Type":"application/json"},
-body:JSON.stringify({
-room_code:roomCode,
-number:number
-})
-})
-.then(r=>r.json())
-.then(()=>{
-console.log("Number sent:",number)
-})
-.catch(err=>{
-console.error("Error calling number:",err)
-})
-
-}
 
 /* RECEIVE NUMBER */
 
