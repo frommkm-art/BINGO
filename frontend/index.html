@@ -249,7 +249,7 @@ console.error(err)
 
 }
 
-window.callNumber = callNumber;
+
 
 /* JOIN ROOM */
 
@@ -306,8 +306,9 @@ let td=document.createElement("td")
 td.innerText=n
 td.id="cell-"+n
 
-td.onclick=function(){
+td.onclick=()=>{
 if(!myTurn) return
+if(called.includes(n)) return
 callNumber(n)
 }
 
@@ -324,13 +325,15 @@ table.appendChild(tr)
 
 /* RECEIVE NUMBER */
 
-socket.on("number-called",num=>{
+socket.on("number-called",(num)=>{
 
 document.getElementById("sound").play()
 
 if(!called.includes(num)){
 called.push(num)
 }
+
+setTimeout(()=>{
 
 let cell=document.getElementById("cell-"+num)
 
@@ -340,9 +343,15 @@ cell.classList.add("marked")
 
 checkBingo()
 
-myTurn=!myTurn
+},50)
 
-document.getElementById("turnStatus").innerText=
+})
+
+socket.on("turn",(turn)=>{
+
+myTurn = (turn === playerNumber)
+
+document.getElementById("turnStatus").innerText =
 myTurn ? "Your Turn" : "Opponent Turn"
 
 })
