@@ -228,7 +228,7 @@ let called=[]
 
 function callNumber(number){
 
-if(!roomCode) return
+if(!roomCode) return;
 
 fetch("/api/call-number",{
 method:"POST",
@@ -240,10 +240,10 @@ number:number
 })
 .then(r=>r.json())
 .then(()=>{
-console.log("Number sent:",number)
+console.log("Number called:",number)
 })
 .catch(err=>{
-console.error("Call number error:",err)
+console.error(err)
 })
 
 }
@@ -301,12 +301,12 @@ let tr=document.createElement("tr")
 row.forEach(n=>{
 
 let td=document.createElement("td")
+
 td.innerText=n
 td.id="cell-"+n
 
-td.onclick=()=>{
+td.onclick=function(){
 if(!myTurn) return
-if(called.includes(n)) return
 callNumber(n)
 }
 
